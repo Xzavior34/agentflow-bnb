@@ -424,26 +424,23 @@ function MarketplaceAgentCard({
         </div>
 
         <div className="flex gap-2">
-          {/* Prominent Hire Agent CTA for Hirable Agents */}
-          {isHirable ? (
-            <Button
-              onClick={onHire}
-              size="sm"
-              className="flex-1 font-mono text-xs h-8 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold shadow-[0_0_10px_rgba(251,191,36,0.3)] gap-1"
-            >
-              <Zap className="w-3.5 h-3.5 fill-neutral-950" />
-              Hire Agent
-            </Button>
-          ) : (
-            <Button asChild size="sm" variant="outline" className="flex-1 font-mono text-xs h-8 border-border hover:border-amber-400">
-              <Link to={`/agents/${agent.chainId}/${agent.tokenId}`}>View Agent</Link>
-            </Button>
-          )}
+          <Button
+            onClick={onHire}
+            size="sm"
+            className="flex-1 font-mono text-xs h-8 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold shadow-[0_0_10px_rgba(251,191,36,0.3)] gap-1"
+          >
+            <Zap className="w-3.5 h-3.5 fill-neutral-950" />
+            Hire Agent
+          </Button>
+
+          <Button asChild size="sm" variant="outline" className="font-mono text-xs h-8 border-border hover:border-amber-400 px-2.5">
+            <Link to={`/agents/${agent.chainId}/${agent.tokenId}`}>Inspect</Link>
+          </Button>
 
           <Button
             size="sm"
             variant={selected ? 'default' : 'outline'}
-            className={`font-mono text-xs h-8 ${selected ? 'bg-neutral-800 text-amber-400 border-amber-400/50' : 'border-border hover:border-amber-400'}`}
+            className={`font-mono text-xs h-8 px-2.5 ${selected ? 'bg-neutral-800 text-amber-400 border-amber-400/50' : 'border-border hover:border-amber-400'}`}
             disabled={compareDisabled}
             onClick={onToggleCompare}
           >

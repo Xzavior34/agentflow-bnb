@@ -146,34 +146,30 @@ export default function AgentProfile() {
 
           {/* Primary Action Buttons */}
           <div className="flex flex-wrap gap-3 items-center">
-            {isHirable && (
-              <Button
-                onClick={() => setIsHireWizardOpen(true)}
-                size="lg"
-                className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-mono text-sm font-bold shadow-[0_0_15px_rgba(251,191,36,0.25)] gap-2 px-8"
-              >
-                <Zap className="w-4 h-4 fill-neutral-950" />
-                Hire Agent
-              </Button>
-            )}
+            <Button
+              onClick={() => setIsHireWizardOpen(true)}
+              size="lg"
+              className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-mono text-sm font-bold shadow-[0_0_15px_rgba(251,191,36,0.25)] gap-2 px-8"
+            >
+              <Zap className="w-4 h-4 fill-neutral-950" />
+              {isHirable
+                ? 'Hire Agent (ERC-8183 Escrow)'
+                : agent.activationStatus === 'PAYABLE'
+                ? 'Pay & Hire Agent (x402)'
+                : agent.activationStatus === 'CALLABLE'
+                ? 'Call & Hire Agent (A2A/MCP)'
+                : 'Hire Agent (Escrow Sandbox)'}
+            </Button>
 
-            {isHirable && (
-              <Button
-                onClick={() => setIsReceiptOpen(true)}
-                variant="outline"
-                size="lg"
-                className="font-mono text-xs gap-2 border-border hover:border-amber-400"
-              >
-                <Receipt className="w-4 h-4" />
-                Inspect Onchain Job Receipt
-              </Button>
-            )}
-
-            {!isHirable && (
-              <Button disabled variant="outline" className="font-mono text-xs border-border opacity-70">
-                Activation Not Yet Supported
-              </Button>
-            )}
+            <Button
+              onClick={() => setIsReceiptOpen(true)}
+              variant="outline"
+              size="lg"
+              className="font-mono text-xs gap-2 border-border hover:border-amber-400"
+            >
+              <Receipt className="w-4 h-4" />
+              Inspect Onchain Job Receipt
+            </Button>
           </div>
         </div>
 

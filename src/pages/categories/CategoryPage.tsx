@@ -310,15 +310,12 @@ function CategoryAgentCard({ agent, onHire }: { agent: AgentFlowAgent; onHire: (
       </div>
 
       <div className="pt-3 border-t border-border/50 flex items-center justify-between gap-2">
-        {isHirable ? (
-          <Button onClick={onHire} size="sm" className="w-full font-mono text-xs h-7 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold gap-1">
-            <Zap className="w-3 h-3 fill-neutral-950" /> Hire Agent
-          </Button>
-        ) : (
-          <Button asChild size="sm" variant="outline" className="w-full font-mono text-xs h-7 border-border hover:border-amber-400">
-            <Link to={`/agents/${agent.chainId}/${agent.tokenId}`}>Inspect Agent</Link>
-          </Button>
-        )}
+        <Button onClick={onHire} size="sm" className="flex-1 font-mono text-xs h-7 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold gap-1">
+          <Zap className="w-3 h-3 fill-neutral-950" /> Hire Agent
+        </Button>
+        <Button asChild size="sm" variant="outline" className="font-mono text-xs h-7 border-border hover:border-amber-400 px-3">
+          <Link to={`/agents/${agent.chainId}/${agent.tokenId}`}>Inspect</Link>
+        </Button>
       </div>
     </div>
   );
