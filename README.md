@@ -66,6 +66,9 @@ AgentFlow enforces a **Zero Synthetic Production Data Guarantee**. Every metric,
 
 ## 🚀 Quick Start & Local Development
 
+### Live Production URL
+👉 **[`https://agentflow-bnb.vercel.app/`](https://agentflow-bnb.vercel.app/)**
+
 ### Prerequisites
 - Node.js >= 20.0.0
 - npm >= 10.0.0
@@ -73,8 +76,8 @@ AgentFlow enforces a **Zero Synthetic Production Data Guarantee**. Every metric,
 ### Installation
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-org/agentflow.git
-cd agentflow
+git clone https://github.com/Xzavior34/agentflow-bnb.git
+cd agentflow-bnb
 
 # 2. Install dependencies
 npm install
