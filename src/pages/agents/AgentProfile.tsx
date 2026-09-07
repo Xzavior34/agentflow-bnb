@@ -12,6 +12,7 @@ import { NETWORKS, ACTIVE_NETWORK } from '@/config/networks';
 import { ERC8183JobReceiptModal } from '@/components/ERC8183JobReceiptModal';
 import { ERC8183HireWizardModal } from '@/components/ERC8183HireWizardModal';
 import type { JobReceipt } from '@/services/commerce/types';
+import { fetchAgentProofPassport, getAgentProofDirectUrl, type AgentProofData } from '@/services/agentproof/client';
 
 function explorerUrlForChain(chainId: number | null): string | null {
   if (chainId === NETWORKS.bscMainnet.chainId) return NETWORKS.bscMainnet.explorerUrl;
@@ -26,6 +27,8 @@ export default function AgentProfile() {
 
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [isHireWizardOpen, setIsHireWizardOpen] = useState(false);
+  const [agentProof, setAgentProof] = useState<AgentProofData | null>(null);
+  const [isLoadingProof, setIsLoadingProof] = useState(false);
 
   const { data: agent, isLoading, isError, error } = useAgentProfile(chainId, tokenId ?? '');
 
@@ -34,6 +37,19 @@ export default function AgentProfile() {
       setIsHireWizardOpen(true);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (agent?.tokenId) {
+      setIsLoadingProof(true);
+      fetchAgentProofPassport(agent.chainId || chainId, agent.tokenId)
+        .then((proof) => {
+          setAgentProof(proof);
+        })
+        .finally(() => {
+          setIsLoadingProof(false);
+        });
+    }
+  }, [agent, chainId]);
 
   if (isLoading) {
     return (
@@ -264,21 +280,56 @@ export default function AgentProfile() {
           </p>
 
           <div className="p-4 rounded-lg bg-muted/30 border border-border/40 font-mono text-xs space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Passport Index Status:</span>
-              <span className="text-foreground font-semibold">
-                Independent reliability evidence not yet available
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-2 border-t border-border/30">
-              <span>Canonical Target: {agent.chainId ? `BSC:${agent.chainId}:${agent.tokenId}` : 'BSC-97'}</span>
+            {isLoadingProof ? (
+              <div className="flex items-center justify-between text-muted-foreground">
+                <span>Querying AgentProof REST API...</span>
+              </div>
+            ) : agentProof && (agentProof.availabilityPct !== null || agentProof.observationCount > 0) ? (
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Measured 24h Availability:</span>
+                  <span className="text-emerald-400 font-bold font-mono text-sm">
+                    {agentProof.availabilityPct !== null && agentProof.availabilityPct !== undefined
+                      ? `${agentProof.availabilityPct.toFixed(1)}%`
+                      : 'N/A'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Median Response Latency:</span>
+                  <span className="text-amber-400 font-semibold">
+                    {agentProof.medianLatencyMs !== null && agentProof.medianLatencyMs !== undefined
+                      ? `${agentProof.medianLatencyMs} ms`
+                      : 'N/A'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Observation Probes & Sufficiency:</span>
+                  <span className="text-foreground flex items-center gap-1.5">
+                    <span>{agentProof.observationCount} probes</span>
+                    <Badge variant="outline" className="text-[10px] py-0 px-1 border-amber-400/30 text-amber-400 font-mono">
+                      {agentProof.dataSufficiency}
+                    </Badge>
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Passport Index Status:</span>
+                <span className="text-foreground font-semibold">
+                  Independent probe evidence available via REST API
+                </span>
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-muted-foreground pt-3 border-t border-border/30 gap-2">
+              <span>Canonical Target: bsc:{agent.tokenId}</span>
               <a
-                href="https://agentproof-rho.vercel.app"
+                href={getAgentProofDirectUrl(agent.tokenId, 'reliability')}
                 target="_blank"
                 rel="noreferrer"
-                className="text-amber-400 hover:underline flex items-center gap-1"
+                className="text-amber-400 hover:underline font-mono font-semibold flex items-center gap-1"
               >
-                View Full Reliability Passport <ExternalLink className="w-3 h-3" />
+                View Live AgentProof REST API Data <ExternalLink className="w-3 h-3" />
               </a>
             </div>
           </div>
