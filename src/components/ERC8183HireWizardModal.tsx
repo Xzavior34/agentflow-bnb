@@ -21,10 +21,7 @@ interface ERC8183HireWizardModalProps {
 const SERVER_EXECUTION_WALLET = '0xA3bb7739aDEC947D6d935ab6E8c60F5E9bDf6B8B';
 
 export function ERC8183HireWizardModal({ agent, isOpen, onClose, onOpenReceipt }: ERC8183HireWizardModalProps) {
-  const walletRes = useWallet();
-  const wallet = walletRes?.wallet;
-  const connectWallet = walletRes?.connectWallet;
-  const isConnecting = Boolean(walletRes?.isConnecting);
+  const { address, isConnected, isConnecting, connect } = useWallet();
 
   const [step, setStep] = useState<number>(1);
   const [taskDescription, setTaskDescription] = useState('Verify onchain contract deployment and collateral health factor');
@@ -58,7 +55,7 @@ export function ERC8183HireWizardModal({ agent, isOpen, onClose, onOpenReceipt }
 
   if (!isOpen) return null;
 
-  const activeWalletAddress = wallet?.address || SERVER_EXECUTION_WALLET;
+  const activeWalletAddress = address || SERVER_EXECUTION_WALLET;
   const isServerWalletZero = serverBalance === '0.0' || serverBalance === '0';
 
   const resetWizard = () => {
@@ -225,9 +222,9 @@ export function ERC8183HireWizardModal({ agent, isOpen, onClose, onOpenReceipt }
             <div className="glass-card p-5 space-y-3 font-mono text-xs border-border">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">User Injected Wallet:</span>
-                {wallet?.isConnected ? (
+                {isConnected ? (
                   <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/40">
-                    Connected ({wallet.address?.slice(0, 6)}...{wallet.address?.slice(-4)})
+                    Connected ({address?.slice(0, 6)}...{address?.slice(-4)})
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-muted-foreground">Not Connected</Badge>
@@ -240,9 +237,9 @@ export function ERC8183HireWizardModal({ agent, isOpen, onClose, onOpenReceipt }
               </div>
             </div>
 
-            {!wallet?.isConnected && (
+            {!isConnected && (
               <Button
-                onClick={connectWallet}
+                onClick={connect}
                 disabled={isConnecting}
                 variant="outline"
                 className="w-full font-mono text-xs border-amber-400/50 hover:bg-amber-400/10 text-amber-400"

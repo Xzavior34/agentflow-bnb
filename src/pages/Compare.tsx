@@ -15,15 +15,21 @@ export default function Compare() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: allAgents = [], isLoading } = useAgents({ bscOnly: true, limit: 100 });
 
-  // Initial selection from query parameters or default to top candidates
-  const initialIds = useMemo(() => {
+  // Initial selection from query parameters or default to top candidates once loaded
+  const urlIds = useMemo(() => {
     const fromUrl = searchParams.get('ids')?.split(',').filter(Boolean) ?? [];
     if (fromUrl.length > 0) return fromUrl.slice(0, MAX_COMPARE);
+    return [];
+  }, [searchParams]);
+
+  const [userSelectedIds, setUserSelectedIds] = useState<string[] | null>(null);
+
+  const selectedIds = useMemo(() => {
+    if (userSelectedIds !== null) return userSelectedIds;
+    if (urlIds.length > 0) return urlIds;
     if (allAgents.length >= 2) return [allAgents[0].id, allAgents[1].id];
     return [];
-  }, [searchParams, allAgents]);
-
-  const [selectedIds, setSelectedIds] = useState<string[]>(initialIds);
+  }, [userSelectedIds, urlIds, allAgents]);
 
   const selectedAgents = useMemo(() => {
     return selectedIds
@@ -34,13 +40,13 @@ export default function Compare() {
   const addAgent = (agentId: string) => {
     if (selectedIds.includes(agentId) || selectedIds.length >= MAX_COMPARE) return;
     const next = [...selectedIds, agentId];
-    setSelectedIds(next);
+    setUserSelectedIds(next);
     setSearchParams({ ids: next.join(',') });
   };
 
   const removeAgent = (agentId: string) => {
     const next = selectedIds.filter((id) => id !== agentId);
-    setSelectedIds(next);
+    setUserSelectedIds(next);
     setSearchParams({ ids: next.join(',') });
   };
 

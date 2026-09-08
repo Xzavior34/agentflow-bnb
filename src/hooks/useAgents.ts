@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAgents, searchAgents, getAgentByChainAndToken, ScanApiRateLimitError } from '@/services/agents/8004scan';
+import { getAgents, searchAgents, getAgentByChainAndToken, getStats, ScanApiRateLimitError } from '@/services/agents/8004scan';
 import { normalizeAgents, normalizeAgent, filterBscOnly } from '@/services/agents/normalize';
 import type { AgentFlowAgent } from '@/services/agents/types';
 
