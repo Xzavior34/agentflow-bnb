@@ -132,7 +132,7 @@ export function useWallet() {
       await updateBalance(address, browserProvider);
 
       if (!isCorrectNetwork) {
-        toast.warning(`Please switch to ${ACTIVE_CHAIN.chainName} for the demo`);
+        toast.warning(`Please switch to ${ACTIVE_CHAIN.chainName} for BNB Chain transactions`);
         await switchToActiveChain();
       } else {
         toast.success('Wallet connected!');
