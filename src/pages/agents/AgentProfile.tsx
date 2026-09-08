@@ -1,6 +1,6 @@
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { ExternalLink, ArrowLeft, ShieldCheck, Zap, Receipt, Cpu, CheckCircle2, Lock, AlertCircle, Layers } from 'lucide-react';
+import { ExternalLink, ArrowLeft, ShieldCheck, Zap, Receipt, Cpu, CheckCircle2, Lock, AlertCircle, Layers, Scale } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -184,7 +184,19 @@ export default function AgentProfile() {
               className="font-mono text-xs gap-2 border-border hover:border-amber-400"
             >
               <Receipt className="w-4 h-4" />
-              Inspect Onchain Job Receipt
+              Inspect Job Receipt
+            </Button>
+
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="font-mono text-xs gap-2 border-border hover:border-amber-400"
+            >
+              <Link to={`/compare?ids=${agent.id}`}>
+                <Scale className="w-4 h-4 text-amber-400" />
+                Compare Agent
+              </Link>
             </Button>
           </div>
         </div>
