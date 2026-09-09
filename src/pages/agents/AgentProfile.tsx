@@ -12,7 +12,7 @@ import { NETWORKS, ACTIVE_NETWORK } from '@/config/networks';
 import { ERC8183JobReceiptModal } from '@/components/ERC8183JobReceiptModal';
 import { ERC8183HireWizardModal } from '@/components/ERC8183HireWizardModal';
 import type { JobReceipt } from '@/services/commerce/types';
-import { fetchAgentProofPassport, getAgentProofDirectUrl, getAgentProofBadgeUrl, type AgentProofData } from '@/services/agentproof/client';
+import { fetchAgentProofPassport, getAgentProofDirectUrl, getAgentProofWebPassportUrl, getAgentProofBadgeUrl, type AgentProofData } from '@/services/agentproof/client';
 
 function explorerUrlForChain(chainId: number | null): string | null {
   if (chainId === NETWORKS.bscMainnet.chainId) return NETWORKS.bscMainnet.explorerUrl;
@@ -345,16 +345,26 @@ export default function AgentProfile() {
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-muted-foreground pt-3 border-t border-border/30 gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-muted-foreground pt-3 border-t border-border/30 gap-3">
               <span>Canonical Target: bsc:{agent.tokenId}</span>
-              <a
-                href={getAgentProofDirectUrl(agent.tokenId, 'reliability')}
-                target="_blank"
-                rel="noreferrer"
-                className="text-amber-400 hover:underline font-mono font-semibold flex items-center gap-1"
-              >
-                View Live AgentProof REST API Data <ExternalLink className="w-3 h-3" />
-              </a>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href={getAgentProofWebPassportUrl(agent.tokenId)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-2.5 py-1 rounded bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/30 transition-colors font-mono font-semibold flex items-center gap-1.5"
+                >
+                  View Web Passport <ExternalLink className="w-3 h-3" />
+                </a>
+                <a
+                  href={getAgentProofDirectUrl(agent.tokenId, 'reliability')}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted-foreground hover:text-amber-400 hover:underline font-mono flex items-center gap-1"
+                >
+                  Raw REST API (JSON) <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
             </div>
           </div>
         </section>

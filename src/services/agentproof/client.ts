@@ -35,6 +35,12 @@ export function getAgentProofDirectUrl(
   return `${AGENTPROOF_BASE_URL}/agents/bsc/${formattedId}/${endpoint}`;
 }
 
+export function getAgentProofWebPassportUrl(tokenId: string): string {
+  const cleanId = tokenId.trim();
+  const formattedId = cleanId.startsWith('bsc:') ? cleanId : `bsc:${cleanId}`;
+  return `https://agentproof-rho.vercel.app/agents/bsc/${formattedId}`;
+}
+
 export function getAgentProofBadgeUrl(tokenId: string): string {
   const cleanId = tokenId.trim();
   const formattedId = cleanId.startsWith('bsc:') ? cleanId : `bsc:${cleanId}`;
