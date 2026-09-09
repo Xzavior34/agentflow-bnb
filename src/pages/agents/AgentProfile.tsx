@@ -12,7 +12,7 @@ import { NETWORKS, ACTIVE_NETWORK } from '@/config/networks';
 import { ERC8183JobReceiptModal } from '@/components/ERC8183JobReceiptModal';
 import { ERC8183HireWizardModal } from '@/components/ERC8183HireWizardModal';
 import type { JobReceipt } from '@/services/commerce/types';
-import { fetchAgentProofPassport, getAgentProofDirectUrl, type AgentProofData } from '@/services/agentproof/client';
+import { fetchAgentProofPassport, getAgentProofDirectUrl, getAgentProofBadgeUrl, type AgentProofData } from '@/services/agentproof/client';
 
 function explorerUrlForChain(chainId: number | null): string | null {
   if (chainId === NETWORKS.bscMainnet.chainId) return NETWORKS.bscMainnet.explorerUrl;
@@ -277,14 +277,26 @@ export default function AgentProfile() {
 
         {/* Independent Reliability Evidence — Provided by AgentProof */}
         <section className="glass-card p-6 mb-6 border-amber-400/20">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <h2 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-amber-400" />
               Independent Reliability Evidence — Provided by AgentProof
             </h2>
-            <Badge variant="outline" className="text-[10px] font-mono text-amber-400 border-amber-400/40">
-              INDEPENDENT PROBE DATA
-            </Badge>
+            <div className="flex items-center gap-2">
+              {agent.tokenId && (
+                <img
+                  src={getAgentProofBadgeUrl(agent.tokenId)}
+                  alt="AgentProof Live Badge"
+                  className="h-5 rounded"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              )}
+              <Badge variant="outline" className="text-[10px] font-mono text-amber-400 border-amber-400/40">
+                INDEPENDENT PROBE DATA
+              </Badge>
+            </div>
           </div>
 
           <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
